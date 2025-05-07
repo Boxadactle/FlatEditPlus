@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.boxadactle.flatedit.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "WorldCreationUiStateMixin",
+    "FlatSettingsAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

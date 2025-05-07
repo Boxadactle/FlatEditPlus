@@ -1,0 +1,1 @@
+{"name":"Bottomless Pit","layers":[{"block":"minecraft:cobblestone","layers":2},{"block":"minecraft:dirt","layers":3},{"block":"minecraft:grass_block","layers":1}],"biome":"minecraft:plains","decorations":false,"addLakes":false,"structures":["villages","ruined_portals","mineshafts","ancient_cities","trial_chambers"],"features":["lake_lava_underground","lake_lava_surface"]}

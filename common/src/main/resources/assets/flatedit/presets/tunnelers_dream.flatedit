@@ -1,0 +1,1 @@
+{"name":"Tunnelers\u0027 Dream","layers":[{"block":"minecraft:bedrock","layers":1},{"block":"minecraft:stone","layers":230},{"block":"minecraft:dirt","layers":5},{"block":"minecraft:grass_block","layers":1}],"biome":"minecraft:windswept_hills","decorations":true,"addLakes":true,"structures":["strongholds","mineshafts","trial_chambers"],"features":["lake_lava_underground"]}

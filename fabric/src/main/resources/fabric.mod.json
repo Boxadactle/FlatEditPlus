@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "flatedit",
+  "version": "${version}",
+
+  "name": "FlatEdit+",
+  "description": "A rework of the horrific superflat creation screen.",
+  "authors": [ "Boxadactle" ],
+  "contact": {},
+
+  "license": "MIT",
+  "icon": "icon.png",
+
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "dev.boxadactle.flatedit.fabric.FlatEditFabric"
+    ],
+    "modmenu": [
+      "dev.boxadactle.flatedit.fabric.ModMenuImpl"
+    ]
+  },
+  "mixins": [
+    "flatedit.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": "*",
+    "minecraft": "1.21.*",
+    "boxlib": "14.*"
+  },
+  "recommends": {
+    "modmenu": "*"
+  }
+}

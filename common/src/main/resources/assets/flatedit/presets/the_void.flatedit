@@ -1,0 +1,1 @@
+{"name":"The Void","layers":[{"block":"minecraft:air","layers":1}],"biome":"minecraft:the_void","decorations":true,"addLakes":true,"structures":["strongholds","villages"],"features":["void_start_platform"]}
