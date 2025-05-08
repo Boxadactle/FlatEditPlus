@@ -1,6 +1,8 @@
-<center>Isn't it such a hassle to use external sites just to create custom superflat presets?</center>
+<center><h3>Isn't it such a hassle to use external sites just to create custom superflat presets?</h3></center>
 
-<center>Have you ever wanted to create custom presets right inside of Minecraft?</center>
+
+
+<center><h3>Have you ever wanted to create custom presets right inside of Minecraft?</h3</center>
 
 # FlatEdit+ (the superior superflat customization system)
 FlatEdit+ is a client-side quality-of-life Minecraft mod that overhauls the Superflat World Creation System, giving players much greater control, clarity, and power when designing custom flat worlds.
