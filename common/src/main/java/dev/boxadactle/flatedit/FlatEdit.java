@@ -28,7 +28,7 @@ public class FlatEdit {
 
     public static final String MOD_NAME = "FlatEdit";
     public static final String MOD_ID = "flatedit";
-    public static final String MOD_VERSION = "1.0.0";
+    public static final String MOD_VERSION = "4.0.0";
     public static final String VERSION_STRING = MOD_NAME + " v" + MOD_VERSION;
 
     public static final ModLogger LOGGER = new ModLogger(MOD_NAME);
