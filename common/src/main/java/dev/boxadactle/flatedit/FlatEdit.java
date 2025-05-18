@@ -36,6 +36,8 @@ public class FlatEdit {
     public static final Path PRESETS_PATH = Path.of(ClientUtils.getConfigFolder().toString(), "/" + MOD_ID + "-presets/");
     public static final String PRESETS_EXTENSION = ".flatedit";
 
+    public static ResourceLocation SLOT_SPRITE = ResourceLocation.withDefaultNamespace("container/slot");
+
     public static BConfigClass<ModConfig> CONFIG;
 
     public static final List<ResourceLocation> DEFAULT_PRESETS = ImmutableList.of(

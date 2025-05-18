@@ -28,7 +28,7 @@ A rework of the horrific superflat creation screen.
 [[dependencies.flatedit]]
    modId = "boxlib"
    type = "required"
-   versionRange = "[14.0.0, 15.0.0)"
+   versionRange = "[15.0.0, 16.0.0)"
    ordering = "NONE"
    side = "BOTH"
 

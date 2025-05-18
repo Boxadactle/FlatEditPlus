@@ -1,11 +1,14 @@
 package dev.boxadactle.flatedit.json;
 
 import com.google.gson.JsonObject;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.flat.FlatLayerInfo;
+
+import java.util.Optional;
 
 public record FlatLayer(Block block, int layers) {
     public static FlatLayer fromInfo(FlatLayerInfo info) {
@@ -36,8 +39,8 @@ public record FlatLayer(Block block, int layers) {
 
     public static FlatLayer deserialize(JsonObject o) {
         ResourceLocation id = ResourceLocation.parse(o.get("block").getAsString());
-        Block block = BuiltInRegistries.BLOCK.get(id);
+        Optional<Holder.Reference<Block>> block = BuiltInRegistries.BLOCK.get(id);
         int layers = o.get("layers").getAsInt();
-        return new FlatLayer(block, layers);
+        return new FlatLayer(block.get().value(), layers);
     }
 }

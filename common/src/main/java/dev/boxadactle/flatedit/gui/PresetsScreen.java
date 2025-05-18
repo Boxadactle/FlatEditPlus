@@ -7,6 +7,7 @@ import dev.boxadactle.boxlib.gui.config.widget.label.BCenteredLabel;
 import dev.boxadactle.boxlib.gui.config.widget.label.BLabel;
 import dev.boxadactle.boxlib.prompt.Prompts;
 import dev.boxadactle.boxlib.util.ClientUtils;
+import dev.boxadactle.boxlib.util.RenderUtils;
 import dev.boxadactle.flatedit.FlatEdit;
 import dev.boxadactle.flatedit.FlatEditScreen;
 import dev.boxadactle.flatedit.json.FlatPreset;
@@ -15,6 +16,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -249,7 +251,7 @@ public class PresetsScreen extends BOptionScreen {
         public void render(GuiGraphics stack, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             ItemStack item = FlatEdit.getDisplayItem(preset.layers.getLast().getBlockState());
 
-            stack.blitSprite(ResourceLocation.withDefaultNamespace("container/slot"), x+1, y+1, 18, 18);
+            stack.blitSprite(RenderType::guiTextured, FlatEdit.SLOT_SPRITE, x+1, y+1, 18, 18);
             if (!item.isEmpty()) {
                 stack.renderFakeItem(item, x+2, y+2);
             }

@@ -6,8 +6,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.world.level.biome.Biome;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -17,27 +15,42 @@ import java.util.Objects;
 public class PresetParser {
 
     public static String serialize(FlatPreset preset) {
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(FlatPreset.class, new PresetSerializer());
-        Gson gson = builder.create();
+        try {
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(FlatPreset.class, new PresetSerializer());
+            Gson gson = builder.create();
 
-        return gson.toJson(preset);
+            return gson.toJson(preset);
+        } catch (Exception e) {
+            FlatEdit.LOGGER.error("Failed to serialize preset", e);
+            return null;
+        }
     }
 
     public static FlatPreset deserialize(String json, HolderGetter<Biome> biomes) {
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(FlatPreset.class, new PresetDeserializer(biomes));
-        Gson gson = builder.create();
+        try {
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(FlatPreset.class, new PresetDeserializer(biomes));
+            Gson gson = builder.create();
 
-        return gson.fromJson(json, FlatPreset.class);
+            return gson.fromJson(json, FlatPreset.class);
+        } catch (Exception e) {
+            FlatEdit.LOGGER.error("Failed to deserialize preset", e);
+            return null;
+        }
     }
 
     public static FlatPreset deserialize(Reader json, HolderGetter<Biome> biomes) {
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(FlatPreset.class, new PresetDeserializer(biomes));
-        Gson gson = builder.create();
+        try {
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(FlatPreset.class, new PresetDeserializer(biomes));
+            Gson gson = builder.create();
 
-        return gson.fromJson(json, FlatPreset.class);
+            return gson.fromJson(json, FlatPreset.class);
+        } catch (Exception e) {
+            FlatEdit.LOGGER.error("Failed to deserialize preset", e);
+            return null;
+        }
     }
 
     public static class PresetSerializer implements JsonSerializer<FlatPreset> {

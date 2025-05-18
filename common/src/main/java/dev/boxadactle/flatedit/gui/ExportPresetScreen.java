@@ -49,7 +49,7 @@ public class ExportPresetScreen extends BOptionScreen {
         Button b = addRenderableWidget(setSaveButton(createHalfDoneButton(startX, startY, ignored -> export())));
         b.setMessage(Component.translatable("screen.flatedit.export.export"));
 
-        addRenderableWidget(createHalfCancelButton(startX, startY + getButtonWidth(ButtonType.SMALL) + getPadding(), parent));
+        addRenderableWidget(createHalfCancelButton(startX + getButtonWidth(ButtonType.SMALL) + getPadding(), startY, parent));
     }
 
     @Override

@@ -27,6 +27,6 @@ side="BOTH"
 [[dependencies.flatedit]]
 modId="boxlib"
 mandatory=true
-versionRange="[14.0.0,15.0.0)"
+versionRange="[15.0.0,16.0.0)"
 ordering="NONE"
 side="CLIENT"
