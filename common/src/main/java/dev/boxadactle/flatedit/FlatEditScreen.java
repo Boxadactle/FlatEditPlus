@@ -94,8 +94,8 @@ public class FlatEditScreen extends BOptionScreen {
     }
 
     @Override
-    protected int getScrollbarPosition() {
-        return super.getScrollbarPosition() + 60;
+    protected int getScrollbarX() {
+        return super.getScrollbarX() + 60;
     }
 
     @Override

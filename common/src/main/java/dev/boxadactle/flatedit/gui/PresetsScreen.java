@@ -95,7 +95,7 @@ public class PresetsScreen extends BOptionScreen {
     }
 
     @Override
-    protected int getScrollbarPosition() {
+    protected int getScrollbarX() {
         return width - 25;
     }
 
@@ -104,7 +104,7 @@ public class PresetsScreen extends BOptionScreen {
 
         if (r.isPresent()) {
             try {
-                return Optional.of(PresetParser.deserialize(new InputStreamReader(r.get().open()), biomes));
+                return Optional.ofNullable(PresetParser.deserialize(new InputStreamReader(r.get().open()), biomes));
             } catch (Exception e) {
                 FlatEdit.LOGGER.error("Failed to read preset from " + location, e);
                 return Optional.empty();
