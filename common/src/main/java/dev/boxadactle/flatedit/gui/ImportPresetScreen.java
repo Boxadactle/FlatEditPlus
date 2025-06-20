@@ -7,6 +7,7 @@ import dev.boxadactle.boxlib.util.ClientUtils;
 import dev.boxadactle.flatedit.FlatEdit;
 import dev.boxadactle.flatedit.FlatEditScreen;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.network.chat.Component;
 
 import java.nio.file.Files;
@@ -19,14 +20,9 @@ public class ImportPresetScreen extends BOptionScreen {
     ExportPresetScreen.PathField field;
 
     public ImportPresetScreen(FlatEditScreen parent) {
-        super(parent);
+        super(parent, Component.translatable("screen.flatedit.import"));
 
         path = FlatEdit.getDesktop();
-    }
-
-    @Override
-    protected Component getName() {
-        return Component.translatable("screen.flatedit.import");
     }
 
     @Override
@@ -49,20 +45,20 @@ public class ImportPresetScreen extends BOptionScreen {
                 Files.exists(path)
         ) {
             FlatEdit.importPreset(path);
-            ClientUtils.setScreen(parent);
+            ClientUtils.setScreen(lastScreen);
         }
     }
 
     @Override
-    protected void initFooter(int startX, int startY) {
-        Button b = addRenderableWidget(setSaveButton(createHalfDoneButton(startX, startY, bu -> importPreset())));
+    protected void initFooter(LinearLayout layout) {
+        Button b = layout.addChild(setSaveButton(createDoneButton(bu -> importPreset())));
         b.setMessage(Component.translatable("screen.flatedit.import.import"));
 
-        addRenderableWidget(createHalfCancelButton(startX + getButtonWidth(ButtonType.SMALL) + getPadding(), startY, parent));
+        layout.addChild(createCancelButton(lastScreen));
     }
 
     @Override
-    protected void initConfigButtons() {
+    protected void addOptions() {
         addConfigLine(new BCenteredLabel(Component.translatable("screen.flatedit.import.import")));
 
         addConfigLine(new BSpacingEntry());

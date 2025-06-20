@@ -1,5 +1,6 @@
 package dev.boxadactle.flatedit;
 
+import dev.boxadactle.boxlib.gui.config.BConfigList;
 import dev.boxadactle.boxlib.gui.config.BOptionButton;
 import dev.boxadactle.boxlib.gui.config.BOptionScreen;
 import dev.boxadactle.boxlib.gui.config.widget.button.BCustomButton;
@@ -15,8 +16,10 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 import net.minecraft.client.gui.screens.worldselection.WorldCreationContext;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.RegistryAccess;
@@ -47,7 +50,7 @@ public class FlatEditScreen extends BOptionScreen {
     Button addLayersButton;
 
     public FlatEditScreen(CreateWorldScreen parent, WorldCreationContext context) {
-        super(parent);
+        super(parent, Component.translatable("screen.flatedit.title"));
 
         this.context = context;
 
@@ -70,12 +73,7 @@ public class FlatEditScreen extends BOptionScreen {
 
     public void reload() {
         configList.children().clear();
-        initConfigButtons();
-    }
-
-    @Override
-    protected Component getName() {
-        return Component.translatable("screen.flatedit.title");
+        addOptions();
     }
 
     @Override
@@ -84,13 +82,8 @@ public class FlatEditScreen extends BOptionScreen {
     }
 
     @Override
-    protected int getScrollingWidgetStart() {
-        return super.getScrollingWidgetStart() + 10;
-    }
-
-    @Override
-    protected int getScrollingWidgetEnd() {
-        return super.getScrollingWidgetEnd() - getButtonHeight();
+    protected int getFooterHeight() {
+        return super.getFooterHeight() + getButtonHeight();
     }
 
     @Override
@@ -99,17 +92,8 @@ public class FlatEditScreen extends BOptionScreen {
     }
 
     @Override
-    protected void initFooter(int i, int i1) {
-        int p = getPadding(),
-            h = getButtonHeight();
-
-        addRenderableWidget(createHalfDoneButton(i, i1, (b) -> {
-            ClientUtils.setScreen(parent);
-
-            ((CreateWorldScreen) parent).getUiState().updateDimensions(flatWorldConfigurator());
-        }));
-
-        addRenderableWidget(createHalfCancelButton(i + getButtonWidth(ButtonType.SMALL) + p, i1, parent));
+    protected void initFooter(LinearLayout layout) {
+        int p = getPadding();
 
         addLayersButton = addRenderableWidget(Button.builder(Component.literal("+"), (b) -> ClientUtils.setScreen(new SelectBlockScreen(this, (ignored, bl) -> ClientUtils.setScreen(new AddLayerScreen(this, bl))))).bounds(width - 22, 2, 20, 20).build());
         if (!FlatEdit.canIAddMoreLayers(preset.getCurrentLayers(), 1)) {
@@ -117,9 +101,23 @@ public class FlatEditScreen extends BOptionScreen {
             addLayersButton.setTooltip(Tooltip.create(Component.translatable("message.flatedit.toomanylayers")));
         }
 
-        addRenderableWidget(Button.builder(Component.translatable("button.flatedit.presets"), (b) -> ClientUtils.setScreen(new PresetsScreen(this, biomes))).bounds(i, i1 - h - p, getButtonWidth(ButtonType.SMALL), h).build());
+        LinearLayout layout1 = layout.addChild(LinearLayout.vertical().spacing(p));
 
-        addRenderableWidget(Button.builder(Component.translatable("screen.flatedit.worldsettings"), b -> ClientUtils.setScreen(new WorldSettingsScreen(this))).bounds(i + getButtonWidth(ButtonType.SMALL) + getPadding(), i1 - h - p, getButtonWidth(ButtonType.SMALL), h).build());
+        LinearLayout things = layout1.addChild(LinearLayout.horizontal().spacing(p));
+
+        things.addChild(Button.builder(Component.translatable("button.flatedit.presets"), (b) -> ClientUtils.setScreen(new PresetsScreen(this, biomes))).build());
+
+        things.addChild(Button.builder(Component.translatable("screen.flatedit.worldsettings"), b -> ClientUtils.setScreen(new WorldSettingsScreen(this))).build());
+
+        LinearLayout exit = layout1.addChild(LinearLayout.horizontal().spacing(p));
+
+        exit.addChild(createDoneButton((b) -> {
+            ClientUtils.setScreen(lastScreen);
+
+            ((CreateWorldScreen) lastScreen).getUiState().updateDimensions(flatWorldConfigurator());
+        }));
+
+        exit.addChild(createCancelButton(lastScreen));
 
 //        addRenderableWidget(Button.builder(Component.translatable("button.flatedit.preview"), b -> ClientUtils.setScreen(new PreviewScreen(preset, this))).bounds(p, p, getButtonWidth(ButtonType.TINY) - p, h).build());
     }
@@ -133,7 +131,7 @@ public class FlatEditScreen extends BOptionScreen {
     }
 
     @Override
-    protected void initConfigButtons() {
+    protected void addOptions() {
         List<LayerEntry> entries = new ArrayList<>();
         for (int i = 0; i < preset.layers().size(); i++) {
             LayerEntry entry = new LayerEntry(preset.layers().get(i), i);
@@ -143,7 +141,7 @@ public class FlatEditScreen extends BOptionScreen {
         FlatEdit.LOGGER.info(preset.layers());
     }
 
-    class LayerEntry extends ConfigList.ConfigEntry {
+    class LayerEntry extends BConfigList.ConfigEntry {
         FlatLayer layer;
 
         BCustomButton remove;
@@ -221,7 +219,7 @@ public class FlatEditScreen extends BOptionScreen {
         public void render(GuiGraphics stack, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             ItemStack item = FlatEdit.getDisplayItem(layer.getBlockState());
 
-            stack.blitSprite(RenderType::guiTextured, FlatEdit.SLOT_SPRITE, x+1, y+1, 18, 18);
+            stack.blitSprite(RenderPipelines.GUI_TEXTURED, FlatEdit.SLOT_SPRITE, x+1, y+1, 18, 18);
             if (!item.isEmpty()) {
                 stack.renderFakeItem(item, x+2, y+2);
             }

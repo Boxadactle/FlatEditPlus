@@ -1,9 +1,11 @@
 package dev.boxadactle.flatedit.gui;
 
 import dev.boxadactle.boxlib.function.Consumer2;
+import dev.boxadactle.boxlib.gui.config.BConfigList;
 import dev.boxadactle.boxlib.gui.config.BOptionButton;
 import dev.boxadactle.boxlib.gui.config.BOptionScreen;
 import dev.boxadactle.boxlib.gui.config.widget.button.BCustomButton;
+import dev.boxadactle.boxlib.gui.widget.CenteredLabelWidget;
 import dev.boxadactle.boxlib.util.GuiUtils;
 import dev.boxadactle.boxlib.util.RenderUtils;
 import dev.boxadactle.flatedit.FlatEdit;
@@ -11,10 +13,10 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -28,35 +30,35 @@ public class SelectBlockScreen extends BOptionScreen {
     Consumer2<Screen, Block> consumer;
 
     public SelectBlockScreen(Screen parent, Consumer2<Screen, Block> consumer) {
-        super(parent);
+        super(parent, Component.translatable("screen.flatedit.selectblock"));
 
         this.consumer = consumer;
     }
 
     @Override
-    protected Component getName() {
-        return Component.translatable("screen.flatedit.selectblock");
-    }
+    protected void addTitle() {
+        LinearLayout title = layout.addToHeader(LinearLayout.vertical().spacing(getPadding()));
 
-    @Override
-    protected void initFooter(int startX, int startY) {
-        addRenderableWidget(createCancelButton(startX, startY, parent));
+        title.addChild(new CenteredLabelWidget(0, 0, getButtonWidth(ButtonType.NORMAL), 20, this.title));
 
-        EditBox searchField = addRenderableWidget(new EditBox(GuiUtils.getTextRenderer(), startX, 20, Component.translatable("screen.flatedit.selectblock.search")));
+        EditBox searchField = title.addChild(new EditBox(GuiUtils.getTextRenderer(), 0, 20, Component.translatable("screen.flatedit.selectblock.search")));
         searchField.setResponder(s -> {
             search = s;
             configList.children().clear();
-            initConfigButtons();
+            addOptions();
         });
         searchField.setMaxLength(128);
-        searchField.setX(startX);
-        searchField.setY(20);
         searchField.setWidth(getButtonWidth(ButtonType.NORMAL));
     }
 
     @Override
-    protected int getScrollingWidgetStart() {
-        return super.getScrollingWidgetStart() + getButtonHeight() + getPadding();
+    protected void initFooter(LinearLayout layout) {
+        layout.addChild(createCancelButton(lastScreen));
+    }
+
+    @Override
+    protected int getHeaderHeight() {
+        return super.getHeaderHeight() + getButtonHeight() + getPadding();
     }
 
     @Override
@@ -70,7 +72,7 @@ public class SelectBlockScreen extends BOptionScreen {
     }
 
     @Override
-    protected void initConfigButtons() {
+    protected void addOptions() {
         List<BlockButton> buttons = new ArrayList<>();
 
         for (Block value : BuiltInRegistries.BLOCK) {
@@ -83,7 +85,7 @@ public class SelectBlockScreen extends BOptionScreen {
                 if (!name.toLowerCase().contains(search.toLowerCase())) continue;
             }
 
-            buttons.add(new BlockButton(block, parent));
+            buttons.add(new BlockButton(block, lastScreen));
 
             if (buttons.size() == 8) {
                 addConfigLine(new BlockRow(buttons));
@@ -126,7 +128,7 @@ public class SelectBlockScreen extends BOptionScreen {
         }
     }
 
-    public class BlockRow extends ConfigList.ConfigEntry {
+    public class BlockRow extends BConfigList.ConfigEntry {
 
         List<BlockButton> buttons;
 

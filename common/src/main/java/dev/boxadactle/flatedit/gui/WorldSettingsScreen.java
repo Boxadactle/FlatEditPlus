@@ -1,50 +1,39 @@
 package dev.boxadactle.flatedit.gui;
 
-import com.mojang.serialization.MapCodec;
-import dev.boxadactle.boxlib.gui.config.BOptionButton;
 import dev.boxadactle.boxlib.gui.config.BOptionScreen;
 import dev.boxadactle.boxlib.gui.config.BOptionTextField;
 import dev.boxadactle.boxlib.gui.config.widget.BSpacingEntry;
 import dev.boxadactle.boxlib.gui.config.widget.button.BBooleanButton;
-import dev.boxadactle.boxlib.gui.config.widget.button.BConfigScreenButton;
-import dev.boxadactle.boxlib.gui.config.widget.button.BCustomButton;
+import dev.boxadactle.boxlib.gui.config.widget.button.BScreenButton;
 import dev.boxadactle.boxlib.util.ClientUtils;
 import dev.boxadactle.flatedit.FlatEdit;
 import dev.boxadactle.flatedit.FlatEditScreen;
 import dev.boxadactle.flatedit.json.FlatFeatures;
 import dev.boxadactle.flatedit.json.FlatStructures;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.BiomeSource;
-import net.minecraft.world.level.biome.Biomes;
-import net.minecraft.world.level.levelgen.structure.StructureSet;
 
 import java.util.function.Consumer;
 
 public class WorldSettingsScreen extends BOptionScreen {
     public WorldSettingsScreen(FlatEditScreen parent) {
-        super(parent);
+        super(parent, Component.translatable("screen.flatedit.world"));
     }
 
     @Override
-    protected Component getName() {
-        return Component.translatable("screen.flatedit.world");
+    protected void initFooter(LinearLayout layout) {
+        layout.addChild(createDoneButton(lastScreen));
     }
 
     @Override
-    protected void initFooter(int startX, int startY) {
-        addRenderableWidget(createDoneButton(startX, startY, parent));
-    }
-
-    @Override
-    protected void initConfigButtons() {
-        FlatEditScreen screen = (FlatEditScreen) parent;
+    protected void addOptions() {
+        FlatEditScreen screen = (FlatEditScreen) lastScreen;
 
         BBooleanButton deco = addConfigLine(new BBooleanButton(
                 "screen.flatedit.world.decorations",
@@ -60,11 +49,11 @@ public class WorldSettingsScreen extends BOptionScreen {
         ));
         addLakes.setTooltip(Tooltip.create(Component.translatable("screen.flatedit.world.addLakes.tooltip")));
 
-        addConfigLine(new BConfigScreenButton(Component.translatable("screen.flatedit.world.biome"), this, (p) -> new BiomeSelection(p, screen.biomes)));
+        addConfigLine(new BScreenButton(Component.translatable("screen.flatedit.world.biome"), this, (p) -> new BiomeSelection(p, screen.biomes)));
 
-        addConfigLine(new BConfigScreenButton(Component.translatable("screen.flatedit.world.features"), this, FeatureSelection::new));
+        addConfigLine(new BScreenButton(Component.translatable("screen.flatedit.world.features"), this, FeatureSelection::new));
 
-        addConfigLine(new BConfigScreenButton(Component.translatable("screen.flatedit.world.structures"), this, StructureSelection::new));
+        addConfigLine(new BScreenButton(Component.translatable("screen.flatedit.world.structures"), this, StructureSelection::new));
     }
 
     private String capitalize(String id) {
@@ -82,28 +71,23 @@ public class WorldSettingsScreen extends BOptionScreen {
         HolderGetter<Biome> biomes;
 
         public BiomeSelection(Screen parent, HolderGetter<Biome> biomes) {
-            super(parent);
+            super(parent, Component.translatable("screen.flatedit.world.biome"));
 
-            biome = ((FlatEditScreen) WorldSettingsScreen.this.parent).preset.biome;
+            biome = ((FlatEditScreen) WorldSettingsScreen.this.lastScreen).preset.biome;
             this.biomes = biomes;
         }
 
         @Override
-        protected Component getName() {
-            return Component.translatable("screen.flatedit.world.biome");
-        }
+        protected void initFooter(LinearLayout layout) {
+            layout.addChild(setSaveButton(createDoneButton(b -> {
+                ((FlatEditScreen) WorldSettingsScreen.this.lastScreen).preset.biome = biome;
 
-        @Override
-        protected void initFooter(int startX, int startY) {
-            addRenderableWidget(setSaveButton(createDoneButton(startX, startY, b -> {
-                ((FlatEditScreen) WorldSettingsScreen.this.parent).preset.biome = biome;
-
-                ClientUtils.setScreen(parent);
+                ClientUtils.setScreen(lastScreen);
             })));
         }
 
         @Override
-        protected void initConfigButtons() {
+        protected void addOptions() {
             addConfigLine(new BSpacingEntry());
             addConfigLine(new BSpacingEntry());
             addConfigLine(new BSpacingEntry());
@@ -150,22 +134,17 @@ public class WorldSettingsScreen extends BOptionScreen {
     class FeatureSelection extends BOptionScreen {
 
         public FeatureSelection(Screen parent) {
-            super(parent);
+            super(parent, Component.translatable("screen.flatedit.world.features"));
         }
 
         @Override
-        protected Component getName() {
-            return Component.translatable("screen.flatedit.world.features");
+        protected void initFooter(LinearLayout layout) {
+            layout.addChild(createDoneButton(lastScreen));
         }
 
         @Override
-        protected void initFooter(int startX, int startY) {
-            addRenderableWidget(createDoneButton(startX, startY, parent));
-        }
-
-        @Override
-        protected void initConfigButtons() {
-            FlatEditScreen screen = (FlatEditScreen) WorldSettingsScreen.this.parent;
+        protected void addOptions() {
+            FlatEditScreen screen = (FlatEditScreen) WorldSettingsScreen.this.lastScreen;
 
             for (FlatFeatures feature : FlatFeatures.values()) {
                 addConfigLine(new BBooleanButton(
@@ -185,22 +164,17 @@ public class WorldSettingsScreen extends BOptionScreen {
 
     class StructureSelection extends BOptionScreen {
         public StructureSelection(Screen parent) {
-            super(parent);
+            super(parent, Component.translatable("screen.flatedit.world.structures"));
         }
 
         @Override
-        protected Component getName() {
-            return Component.translatable("screen.flatedit.world.structures");
+        protected void initFooter(LinearLayout layout) {
+            layout.addChild(createDoneButton(lastScreen));
         }
 
         @Override
-        protected void initFooter(int startX, int startY) {
-            addRenderableWidget(createDoneButton(startX, startY, parent));
-        }
-
-        @Override
-        protected void initConfigButtons() {
-            FlatEditScreen screen = (FlatEditScreen) WorldSettingsScreen.this.parent;
+        protected void addOptions() {
+            FlatEditScreen screen = (FlatEditScreen) WorldSettingsScreen.this.lastScreen;
 
             for (FlatStructures structure : FlatStructures.values()) {
                 addConfigLine(new BBooleanButton(

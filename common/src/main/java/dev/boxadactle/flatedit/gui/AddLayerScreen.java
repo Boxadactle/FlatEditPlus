@@ -8,6 +8,7 @@ import dev.boxadactle.boxlib.util.ClientUtils;
 import dev.boxadactle.flatedit.FlatEdit;
 import dev.boxadactle.flatedit.FlatEditScreen;
 import dev.boxadactle.flatedit.json.FlatLayer;
+import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
 
@@ -20,32 +21,27 @@ public class AddLayerScreen extends BOptionScreen {
     int layers = 1;
 
     public AddLayerScreen(FlatEditScreen parent, Block selectedBlock) {
-        super(parent);
+        super(parent, Component.translatable("screen.flatedit.addlayer", selectedBlock.getName()));
 
         this.selectedBlock = selectedBlock;
     }
 
     @Override
-    protected Component getName() {
-        return Component.translatable("screen.flatedit.addlayer", selectedBlock.getName());
-    }
-
-    @Override
-    protected void initFooter(int startX, int startY) {
-        setSaveButton(createHalfDoneButton(startX, startY, (b -> {
-            FlatEditScreen screen = (FlatEditScreen) parent;
+    protected void initFooter(LinearLayout layout) {
+        setSaveButton(layout.addChild(createDoneButton((b -> {
+            FlatEditScreen screen = (FlatEditScreen) lastScreen;
             FlatEdit.checkLayers(screen.preset.getCurrentLayers(), layers, () -> {
                 screen.preset.layers().add(new FlatLayer(selectedBlock, layers));
                 screen.reload();
                 ClientUtils.setScreen(screen);
             });
-        })));
+        }))));
 
-        addRenderableWidget(createHalfCancelButton(startX + getPadding() + getButtonWidth(ButtonType.SMALL), startY, parent));
+        layout.addChild(createCancelButton(lastScreen));
     }
 
     @Override
-    protected void initConfigButtons() {
+    protected void addOptions() {
         addConfigLine(new BSpacingEntry());
         addConfigLine(new BSpacingEntry());
         addConfigLine(new BSpacingEntry());

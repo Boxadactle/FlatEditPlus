@@ -1,13 +1,14 @@
 package dev.boxadactle.flatedit.gui;
 
+import dev.boxadactle.boxlib.gui.config.BConfigList;
 import dev.boxadactle.boxlib.gui.config.BOptionScreen;
 import dev.boxadactle.boxlib.gui.config.widget.BSpacingEntry;
 import dev.boxadactle.boxlib.gui.config.widget.button.BCustomButton;
 import dev.boxadactle.boxlib.gui.config.widget.label.BCenteredLabel;
 import dev.boxadactle.boxlib.gui.config.widget.label.BLabel;
+import dev.boxadactle.boxlib.gui.widget.CenteredLabelWidget;
 import dev.boxadactle.boxlib.prompt.Prompts;
 import dev.boxadactle.boxlib.util.ClientUtils;
-import dev.boxadactle.boxlib.util.RenderUtils;
 import dev.boxadactle.flatedit.FlatEdit;
 import dev.boxadactle.flatedit.FlatEditScreen;
 import dev.boxadactle.flatedit.json.FlatPreset;
@@ -16,7 +17,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.gui.layouts.LinearLayout;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -38,55 +40,61 @@ public class PresetsScreen extends BOptionScreen {
     HolderGetter<Biome> biomes;
 
     public PresetsScreen(FlatEditScreen parent, HolderGetter<Biome> biomes) {
-        super(parent);
+        super(parent, Component.translatable("screen.flatedit.presets"));
 
         this.biomes = biomes;
     }
 
     @Override
-    protected Component getName() {
-        return Component.translatable("screen.flatedit.presets");
-    }
+    protected void addTitle() {
+        LinearLayout title = layout.addToHeader(LinearLayout.vertical().spacing(getPadding()));
 
-    @Override
-    protected void initFooter(int startX, int startY) {
-        addRenderableWidget(createCancelButton(startX, startY, parent));
+        title.addChild(new CenteredLabelWidget(0, 0, 150, 20, this.title));
 
-        addRenderableWidget(Button.builder(
-                Component.translatable("screen.flatedit.presets.export"),
-                b -> ClientUtils.setScreen(new ExportPresetScreen((FlatEditScreen) parent, ((FlatEditScreen) parent).preset))
-        ).bounds(startX, startY - 22, getButtonWidth(ButtonType.SMALL), getButtonHeight()).build());
-
-        addRenderableWidget(Button.builder(
-                Component.translatable("screen.flatedit.presets.import"),
-                b -> ClientUtils.setScreen(new ImportPresetScreen((FlatEditScreen) parent))
-        ).bounds(startX + getButtonWidth(ButtonType.SMALL) + getPadding() * 2, startY - 22, getButtonWidth(ButtonType.SMALL), getButtonHeight()).build());
-
-        addRenderableWidget(Button.builder(
+        title.addChild(Button.builder(
                 Component.translatable("screen.flatedit.presets.save"),
                 b -> Prompts.prompt(
-                        parent,
+                        lastScreen,
                         Component.translatable("screen.flatedit.export.name"),
                         name -> {
                             if (name == null || name.isBlank()) {
                                 return;
                             }
-                            FlatPreset preset = ((FlatEditScreen) parent).preset;
+                            FlatPreset preset = ((FlatEditScreen) lastScreen).preset;
                             preset.name = name;
                             FlatEdit.exportPreset(FlatEdit.PRESETS_PATH.resolve(UUID.randomUUID() + FlatEdit.PRESETS_EXTENSION), preset, false);
                         }
                 )
-        ).bounds(startX, 20, getButtonWidth(ButtonType.NORMAL), getButtonHeight()).build());
+        ).build());
     }
 
     @Override
-    protected int getScrollingWidgetStart() {
-        return super.getScrollingWidgetStart() + 24;
+    protected void initFooter(LinearLayout layout) {
+        LinearLayout layout1 = layout.addChild(LinearLayout.vertical().spacing(getPadding()));
+
+        LinearLayout buttons = layout1.addChild(LinearLayout.horizontal().spacing(getPadding()));
+
+        buttons.addChild(Button.builder(
+                Component.translatable("screen.flatedit.presets.export"),
+                b -> ClientUtils.setScreen(new ExportPresetScreen((FlatEditScreen) lastScreen, ((FlatEditScreen) lastScreen).preset))
+        ).build());
+
+        buttons.addChild(Button.builder(
+                Component.translatable("screen.flatedit.presets.import"),
+                b -> ClientUtils.setScreen(new ImportPresetScreen((FlatEditScreen) lastScreen))
+        ).build());
+
+        layout1.addChild(createCancelButton(lastScreen)).setWidth(300);
     }
 
     @Override
-    protected int getScrollingWidgetEnd() {
-        return super.getScrollingWidgetEnd() - 20;
+    protected int getHeaderHeight() {
+        return super.getHeaderHeight() + 24;
+    }
+
+    @Override
+    protected int getFooterHeight() {
+        return super.getFooterHeight() + 20;
     }
 
     @Override
@@ -116,7 +124,7 @@ public class PresetsScreen extends BOptionScreen {
     }
 
     @Override
-    protected void initConfigButtons() {
+    protected void addOptions() {
         if (FlatEdit.getConfig().showDefaultPresets) {
             addConfigLine(new BCenteredLabel(Component.translatable("screen.flatedit.presets.default")));
             for (ResourceLocation location : FlatEdit.DEFAULT_PRESETS) {
@@ -157,7 +165,7 @@ public class PresetsScreen extends BOptionScreen {
         }
     }
 
-    public class PresetRow extends ConfigList.ConfigEntry {
+    public class PresetRow extends BConfigList.ConfigEntry {
 
         FlatPreset preset;
 
@@ -176,7 +184,7 @@ public class PresetsScreen extends BOptionScreen {
             nameLabel = new BLabel(Component.literal(preset.name()));
 
             Runnable setPreset = () -> {
-                FlatEditScreen screen = (FlatEditScreen) parent;
+                FlatEditScreen screen = (FlatEditScreen) lastScreen;
                 screen.preset = this.preset;
                 screen.reload();
                 ClientUtils.showToast(
@@ -189,10 +197,10 @@ public class PresetsScreen extends BOptionScreen {
                     Component.translatable("screen.flatedit.presets.use"),
                     () -> {
                         if (FlatEdit.getConfig().confirmPresets) {
-                            Prompts.confirm(parent, Component.translatable("screen.flatedit.presets.use.confirm"), bl -> {
+                            Prompts.confirm(lastScreen, Component.translatable("screen.flatedit.presets.use.confirm"), bl -> {
                                 if (bl) {
                                     setPreset.run();
-                                    ClientUtils.setScreen(parent);
+                                    ClientUtils.setScreen(lastScreen);
                                 } else {
                                     ClientUtils.setScreen(PresetsScreen.this);
                                 }
@@ -216,7 +224,7 @@ public class PresetsScreen extends BOptionScreen {
                     Component.translatable("screen.flatedit.presets.delete"),
                     () -> {
                         if (FlatEdit.getConfig().confirmPresets) {
-                            Prompts.confirm(parent, Component.translatable("screen.flatedit.presets.delete.confirm"), bl -> {
+                            Prompts.confirm(lastScreen, Component.translatable("screen.flatedit.presets.delete.confirm"), bl -> {
                                 if (bl) {
                                     deletePreset.run();
                                     ClientUtils.setScreen(PresetsScreen.this);
@@ -251,7 +259,7 @@ public class PresetsScreen extends BOptionScreen {
         public void render(GuiGraphics stack, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             ItemStack item = FlatEdit.getDisplayItem(preset.layers.getLast().getBlockState());
 
-            stack.blitSprite(RenderType::guiTextured, FlatEdit.SLOT_SPRITE, x+1, y+1, 18, 18);
+            stack.blitSprite(RenderPipelines.GUI_TEXTURED, FlatEdit.SLOT_SPRITE, x+1, y+1, 18, 18);
             if (!item.isEmpty()) {
                 stack.renderFakeItem(item, x+2, y+2);
             }

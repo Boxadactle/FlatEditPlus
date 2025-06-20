@@ -4,6 +4,7 @@ import dev.boxadactle.boxlib.gui.config.BOptionScreen;
 import dev.boxadactle.boxlib.gui.config.widget.BSpacingEntry;
 import dev.boxadactle.boxlib.gui.config.widget.button.BBooleanButton;
 import dev.boxadactle.boxlib.util.ClientUtils;
+import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
@@ -11,31 +12,26 @@ import static dev.boxadactle.flatedit.FlatEdit.getConfig;
 
 public class ConfigScreen extends BOptionScreen {
     public ConfigScreen(Screen parent) {
-        super(parent);
+        super(parent, Component.translatable("screen.flatedit.config", FlatEdit.MOD_VERSION));
 
         FlatEdit.CONFIG.cacheConfig();
     }
 
     @Override
-    protected Component getName() {
-        return Component.translatable("screen.flatedit.config", FlatEdit.MOD_VERSION);
-    }
-
-    @Override
-    protected void initFooter(int startX, int startY) {
-        addRenderableWidget(setSaveButton(createHalfSaveButton(startX, startY, b -> {
+    protected void initFooter(LinearLayout layout) {
+        layout.addChild(setSaveButton(createSaveButton(b -> {
             FlatEdit.CONFIG.save();
-            ClientUtils.setScreen(parent);
+            ClientUtils.setScreen(lastScreen);
         })));
 
-        addRenderableWidget(createHalfCancelButton(startX, startY, p -> {
+        layout.addChild(createCancelButton(p -> {
             FlatEdit.CONFIG.restoreCache();
-            ClientUtils.setScreen(parent);
+            ClientUtils.setScreen(lastScreen);
         }));
     }
 
     @Override
-    protected void initConfigButtons() {
+    protected void addOptions() {
         addConfigLine(new BSpacingEntry());
 
         addConfigLine(new BBooleanButton(
