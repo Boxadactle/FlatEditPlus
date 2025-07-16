@@ -108,7 +108,7 @@ publishMods {
 
 githubRelease {
     owner = "Boxadactle"
-    repo = "DebugKeybind"
+    repo = "FlatEditPlus"
     tagName = "$project.version"
     targetCommitish = "dev"
     releaseName = "${mod_name} $project.version"
