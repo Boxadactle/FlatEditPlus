@@ -53,7 +53,7 @@
 
   "screen.flatedit.addlayer": "Add %s Layer",
 
-  "screen.flatedit.config": "Configuration for FlatEdit+ v%s",
+  "screen.flatedit.config": "Configuration for FlatEdit+",
   "screen.flatedit.config.enabled": "Enabled: %s",
   "screen.flatedit.config.showDefaultPresets": "Show Default Presets: %s",
   "screen.flatedit.config.confirmPresets": "Confirm Preset Selection: %s",

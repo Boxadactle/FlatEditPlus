@@ -1,6 +1,5 @@
 package dev.boxadactle.neoforge;
 
-import dev.boxadactle.flatedit.ConfigScreen;
 import dev.boxadactle.flatedit.FlatEdit;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -15,11 +14,11 @@ public class FlatEditNeoforge {
 
     public FlatEditNeoforge() {
         ModLoadingContext.get().registerExtensionPoint(IConfigScreenFactory.class, () ->
-                (minecraft, screen) -> new ConfigScreen(screen)
+                (minecraft, screen) -> FlatEdit.createConfigScreen(screen)
         );
     }
 
-    @EventBusSubscriber(modid = FlatEdit.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+    @EventBusSubscriber(modid = FlatEdit.MOD_ID, value = Dist.CLIENT)
     public static class FlatEditEvents {
 
         @SubscribeEvent

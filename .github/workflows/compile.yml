@@ -24,4 +24,3 @@ jobs:
 
       - name: Compile java
         run: ./gradlew compileJava
-

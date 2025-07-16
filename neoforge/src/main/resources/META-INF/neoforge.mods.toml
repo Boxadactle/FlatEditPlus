@@ -1,36 +1,35 @@
-modLoader="javafml"
-loaderVersion="[2,)"
-license="MIT"
+modLoader = "javafml"
+loaderVersion = "${neoforge_loader_version_range}"
+license = "${license}"
 
 [[mods]]
-modId="flatedit"
-version="${version}"
-displayName="FlatEdit+"
-logoFile="icon.png"
-description='''
-A rework of the horrific superflat creation screen.
-'''
+modId = "${mod_id}"
+version = "${version}"
+displayName = "${mod_name}"
+authors = "${mod_author}"
+description='''${description}'''
+logoFile = "icon.png"
 
-[[dependencies.flatedit]]
-   modId="neoforge"
-   mandatory=true
-   versionRange="[20,)"
-   ordering="NONE"
-   side="BOTH"
+[[dependencies.${mod_id}]]
+modId = "neoforge"
+type = "required"
+versionRange = "${neoforge_loader_version_range}"
+ordering = "NONE"
+side = "BOTH"
 
-[[dependencies.flatedit]]
-   modId="minecraft"
-   mandatory=true
-   versionRange="[1.21,1.22)"
-   ordering="NONE"
-   side="BOTH"
+[[dependencies.${mod_id}]]
+modId = "minecraft"
+type = "required"
+versionRange = "${minecraft_version_range}"
+ordering = "NONE"
+side = "BOTH"
 
-[[dependencies.flatedit]]
-   modId = "boxlib"
-   type = "required"
-   versionRange = "[18.0.0, 19.0.0)"
-   ordering = "NONE"
-   side = "BOTH"
+[[dependencies.${mod_id}]]
+modId = "boxlib"
+type = "required"
+versionRange = "${boxlib_version_range}"
+ordering = "NONE"
+side = "BOTH"
 
 [[mixins]]
-   config = "flatedit.mixins.json"
+config = "flatedit.mixins.json"

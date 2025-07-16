@@ -1,6 +1,5 @@
 package dev.boxadactle.flatedit.forge;
 
-import dev.boxadactle.flatedit.ConfigScreen;
 import dev.boxadactle.flatedit.FlatEdit;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.fml.ModList;
@@ -13,7 +12,7 @@ public class FlatEditForge {
         FlatEdit.init();
 
         ModList.get().getModContainerById(FlatEdit.MOD_ID).ifPresent(modContainer -> modContainer.registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () ->
-                new ConfigScreenHandler.ConfigScreenFactory(((minecraft, screen) -> new ConfigScreen(screen)))
+                new ConfigScreenHandler.ConfigScreenFactory(((minecraft, screen) -> FlatEdit.createConfigScreen(screen)))
         ));
     }
 

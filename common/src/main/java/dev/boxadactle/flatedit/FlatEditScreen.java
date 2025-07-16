@@ -199,6 +199,11 @@ public class FlatEditScreen extends BOptionScreen {
                 layers = new BRightLabel(Component.literal(Integer.toString(layer.layers())));
             }
 
+            if (FlatEditScreen.this.preset.layers.size() == 1) {
+                down.active = false;
+                up.active = false;
+            }
+
             if (FlatEditScreen.this.preset.layers().size() == 1) {
                 remove.active = false;
                 remove.setTooltip(Tooltip.create(Component.translatable("message.flatedit.onelayer")));

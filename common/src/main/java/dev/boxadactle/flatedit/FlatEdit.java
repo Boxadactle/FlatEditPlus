@@ -3,10 +3,15 @@ package dev.boxadactle.flatedit;
 import com.google.common.collect.ImmutableList;
 import dev.boxadactle.boxlib.config.BConfigClass;
 import dev.boxadactle.boxlib.config.BConfigHandler;
+import dev.boxadactle.boxlib.gui.auto.AutoConfigGui;
+import dev.boxadactle.boxlib.gui.config.BOptionScreen;
 import dev.boxadactle.boxlib.util.ClientUtils;
+import dev.boxadactle.boxlib.util.GuiUtils;
 import dev.boxadactle.boxlib.util.ModLogger;
 import dev.boxadactle.flatedit.json.FlatPreset;
 import dev.boxadactle.flatedit.json.PresetParser;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -155,7 +160,7 @@ public class FlatEdit {
 
             ClientUtils.showToast(
                     Component.translatable("message.flatedit.import"),
-                    Component.translatable("message.flatedit.import.success", path.getFileName())
+                    Component.translatable("message.flatedit.import.success", path.getFileName().toString())
             );
         } catch (java.io.IOException e) {
             LOGGER.error("Failed to import preset from " + path, e);
@@ -165,5 +170,14 @@ public class FlatEdit {
                     Component.translatable("message.flatedit.import.fail")
             );
         }
+    }
+
+    public static BOptionScreen createConfigScreen(Screen parent) {
+        return AutoConfigGui.start(CONFIG.get(), parent)
+                .setFooterProvider((layout, s) -> layout.addChild((new Button.Builder(GuiUtils.SAVE, (b) -> {
+                        FlatEdit.CONFIG.save();
+                        ClientUtils.setScreen(s);
+                })).build()))
+                .build();
     }
 }
