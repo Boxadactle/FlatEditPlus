@@ -71,8 +71,16 @@ public class FlatEditScreen extends BOptionScreen {
         FlatEdit.LOGGER.info(PresetParser.deserialize(o, biomes));
     }
 
+    @Override
+    protected void addContents() {
+        configList = new ResettableConfigList(ClientUtils.getClient(), this);
+        if (shouldRenderScrollingWidget()) layout.addToContents(configList);
+
+        addOptions();
+    }
+
     public void reload() {
-        configList.children().clear();
+        ((ResettableConfigList)configList).clearEntries();
         addOptions();
     }
 
@@ -221,8 +229,13 @@ public class FlatEditScreen extends BOptionScreen {
         }
 
         @Override
-        public void render(GuiGraphics stack, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+        public void renderContent(GuiGraphics stack, int mouseX, int mouseY, boolean b, float tickDelta) {
             ItemStack item = FlatEdit.getDisplayItem(layer.getBlockState());
+
+            int x= getX();
+            int y = getY();
+            int entryWidth = getContentWidth();
+
 
             stack.blitSprite(RenderPipelines.GUI_TEXTURED, FlatEdit.SLOT_SPRITE, x+1, y+1, 18, 18);
             if (!item.isEmpty()) {

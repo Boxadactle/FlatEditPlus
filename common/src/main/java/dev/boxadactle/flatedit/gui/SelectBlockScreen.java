@@ -6,6 +6,7 @@ import dev.boxadactle.boxlib.gui.config.BOptionButton;
 import dev.boxadactle.boxlib.gui.config.BOptionScreen;
 import dev.boxadactle.boxlib.gui.config.widget.button.BCustomButton;
 import dev.boxadactle.boxlib.gui.widget.CenteredLabelWidget;
+import dev.boxadactle.boxlib.util.ClientUtils;
 import dev.boxadactle.boxlib.util.GuiUtils;
 import dev.boxadactle.boxlib.util.RenderUtils;
 import dev.boxadactle.flatedit.FlatEdit;
@@ -36,6 +37,14 @@ public class SelectBlockScreen extends BOptionScreen {
     }
 
     @Override
+    protected void addContents() {
+        configList = new ResettableConfigList(ClientUtils.getClient(), this);
+        if (shouldRenderScrollingWidget()) layout.addToContents(configList);
+
+        addOptions();
+    }
+
+    @Override
     protected void addTitle() {
         LinearLayout title = layout.addToHeader(LinearLayout.vertical().spacing(getPadding()));
 
@@ -44,7 +53,7 @@ public class SelectBlockScreen extends BOptionScreen {
         EditBox searchField = title.addChild(new EditBox(GuiUtils.getTextRenderer(), 0, 20, Component.translatable("screen.flatedit.selectblock.search")));
         searchField.setResponder(s -> {
             search = s;
-            configList.children().clear();
+            ((ResettableConfigList) configList).clearEntries();
             addOptions();
         });
         searchField.setMaxLength(128);
@@ -147,19 +156,19 @@ public class SelectBlockScreen extends BOptionScreen {
         }
 
         @Override
-        public void render(GuiGraphics stack, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+        public void renderContent(GuiGraphics guiGraphics, int mouseX, int mouseY, boolean b, float tickDelta) {
             // render all buttons next to each other in the center of the row maintaining their width; button height always = entryHeight
             int buttonWidth = 20;
             int buttonSpacing = 2;
             int totalWidth = (buttonWidth * buttons.size()) + (buttonSpacing * (buttons.size() - 1));
-            int startX = x + (entryWidth / 2) - (totalWidth / 2);
+            int startX = getContentX() + (getContentWidth() / 2) - (totalWidth / 2);
             for (int i = 0; i < buttons.size(); i++) {
                 BlockButton button = buttons.get(i);
                 button.setX(startX + (i * (buttonWidth + buttonSpacing)));
-                button.setY(y);
+                button.setY(getContentY());
                 button.setWidth(buttonWidth);
-                button.setHeight(entryHeight);
-                button.render(stack, mouseX, mouseY, tickDelta);
+                button.setHeight(getContentHeight());
+                button.render(guiGraphics, mouseX, mouseY, tickDelta);
             }
         }
     }

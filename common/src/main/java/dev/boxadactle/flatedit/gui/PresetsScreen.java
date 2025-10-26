@@ -256,8 +256,13 @@ public class PresetsScreen extends BOptionScreen {
         }
 
         @Override
-        public void render(GuiGraphics stack, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+        public void renderContent(GuiGraphics stack, int mouseX, int mouseY, boolean b, float tickDelta) {
             ItemStack item = FlatEdit.getDisplayItem(preset.layers.getLast().getBlockState());
+
+            int x = getContentX();
+            int y = getContentY();
+            int entryWidth = getContentWidth();
+            int entryHeight = getContentHeight();
 
             stack.blitSprite(RenderPipelines.GUI_TEXTURED, FlatEdit.SLOT_SPRITE, x+1, y+1, 18, 18);
             if (!item.isEmpty()) {
