@@ -64,7 +64,7 @@ public class PresetParser {
             o.addProperty("name", preset.name());
 
             o.add("layers", gson.toJsonTree(preset.layers().stream().map(FlatLayer::serialize).toList()));
-            o.addProperty("biome", preset.biome().unwrapKey().get().location().toString());
+            o.addProperty("biome", preset.biome().unwrapKey().get().identifier().toString());
             o.addProperty("decorations", preset.decorations());
             o.addProperty("addLakes", preset.addLakes());
 

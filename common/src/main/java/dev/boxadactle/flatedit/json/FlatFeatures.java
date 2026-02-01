@@ -48,7 +48,7 @@ public enum FlatFeatures {
 
     public static FlatFeatures fromFeature(Holder<PlacedFeature> ft) {
         for (FlatFeatures feature : values()) {
-            if (ft.is(feature.getFeature().location())) {
+            if (ft.is(feature.getFeature().identifier())) {
                 return feature;
             }
         }

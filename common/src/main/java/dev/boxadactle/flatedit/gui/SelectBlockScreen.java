@@ -123,12 +123,12 @@ public class SelectBlockScreen extends BOptionScreen {
         }
 
         @Override
-        public void renderWidget(GuiGraphics p_93657_, int mouseX, int mouseY, float delta) {
+        protected void renderContents(GuiGraphics p_458247_, int p_457832_, int p_457537_, float p_457835_) {
             if (isHovered()) {
-                RenderUtils.drawSquare(p_93657_, getX(), getY(), getWidth(), getHeight(), 0x405c5c5c);
+                RenderUtils.drawSquare(p_458247_, getX(), getY(), getWidth(), getHeight(), 0x405c5c5c);
             }
 
-            p_93657_.renderFakeItem(FlatEdit.getDisplayItem(block), getX() + 3, getY() + 3);
+            p_458247_.renderFakeItem(FlatEdit.getDisplayItem(block), getX() + 3, getY() + 3);
         }
 
         @Override

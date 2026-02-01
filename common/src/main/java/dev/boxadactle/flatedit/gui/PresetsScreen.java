@@ -21,7 +21,7 @@ import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.biome.Biome;
@@ -107,7 +107,7 @@ public class PresetsScreen extends BOptionScreen {
         return width - 25;
     }
 
-    private Optional<FlatPreset> readDefaultPreset(ResourceLocation location) {
+    private Optional<FlatPreset> readDefaultPreset(Identifier location) {
         Optional<Resource> r = ClientUtils.getClient().getResourceManager().getResource(location);
 
         if (r.isPresent()) {
@@ -127,7 +127,7 @@ public class PresetsScreen extends BOptionScreen {
     protected void addOptions() {
         if (FlatEdit.getConfig().showDefaultPresets) {
             addConfigLine(new BCenteredLabel(Component.translatable("screen.flatedit.presets.default")));
-            for (ResourceLocation location : FlatEdit.DEFAULT_PRESETS) {
+            for (Identifier location : FlatEdit.DEFAULT_PRESETS) {
                 Optional<FlatPreset> preset = readDefaultPreset(location);
                 if (preset.isPresent()) {
                     addConfigLine(new PresetRow(preset.get(), true, null));

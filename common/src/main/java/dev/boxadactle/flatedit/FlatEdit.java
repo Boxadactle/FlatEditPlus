@@ -14,8 +14,8 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -41,20 +41,20 @@ public class FlatEdit {
     public static final Path PRESETS_PATH = Path.of(ClientUtils.getConfigFolder().toString(), "/" + MOD_ID + "-presets/");
     public static final String PRESETS_EXTENSION = ".flatedit";
 
-    public static ResourceLocation SLOT_SPRITE = ResourceLocation.withDefaultNamespace("container/slot");
+    public static Identifier SLOT_SPRITE = Identifier.withDefaultNamespace("container/slot");
 
     public static BConfigClass<ModConfig> CONFIG;
 
-    public static final List<ResourceLocation> DEFAULT_PRESETS = ImmutableList.of(
-            ResourceLocation.fromNamespaceAndPath(MOD_ID, "presets/classic_flat.flatedit"),
-            ResourceLocation.fromNamespaceAndPath(MOD_ID, "presets/tunnelers_dream.flatedit"),
-            ResourceLocation.fromNamespaceAndPath(MOD_ID, "presets/water_world.flatedit"),
-            ResourceLocation.fromNamespaceAndPath(MOD_ID, "presets/overworld.flatedit"),
-            ResourceLocation.fromNamespaceAndPath(MOD_ID, "presets/snowy_kingdom.flatedit"),
-            ResourceLocation.fromNamespaceAndPath(MOD_ID, "presets/bottomless_pit.flatedit"),
-            ResourceLocation.fromNamespaceAndPath(MOD_ID, "presets/desert.flatedit"),
-            ResourceLocation.fromNamespaceAndPath(MOD_ID, "presets/redstone_ready.flatedit"),
-            ResourceLocation.fromNamespaceAndPath(MOD_ID, "presets/the_void.flatedit")
+    public static final List<Identifier> DEFAULT_PRESETS = ImmutableList.of(
+            Identifier.fromNamespaceAndPath(MOD_ID, "presets/classic_flat.flatedit"),
+            Identifier.fromNamespaceAndPath(MOD_ID, "presets/tunnelers_dream.flatedit"),
+            Identifier.fromNamespaceAndPath(MOD_ID, "presets/water_world.flatedit"),
+            Identifier.fromNamespaceAndPath(MOD_ID, "presets/overworld.flatedit"),
+            Identifier.fromNamespaceAndPath(MOD_ID, "presets/snowy_kingdom.flatedit"),
+            Identifier.fromNamespaceAndPath(MOD_ID, "presets/bottomless_pit.flatedit"),
+            Identifier.fromNamespaceAndPath(MOD_ID, "presets/desert.flatedit"),
+            Identifier.fromNamespaceAndPath(MOD_ID, "presets/redstone_ready.flatedit"),
+            Identifier.fromNamespaceAndPath(MOD_ID, "presets/the_void.flatedit")
     );
 
     public static void init() {
@@ -92,7 +92,7 @@ public class FlatEdit {
     }
 
     public static ResourceKey<Biome> getBiome(String key) {
-        Optional<ResourceKey<Biome>> thing = Optional.ofNullable(ResourceLocation.tryParse(key)).map((resourceLocation) -> ResourceKey.create(Registries.BIOME, resourceLocation));
+        Optional<ResourceKey<Biome>> thing = Optional.ofNullable(Identifier.tryParse(key)).map((resourceLocation) -> ResourceKey.create(Registries.BIOME, resourceLocation));
         Objects.requireNonNull(thing);
 
         return thing.get();

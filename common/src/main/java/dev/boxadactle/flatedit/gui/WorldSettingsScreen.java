@@ -126,7 +126,7 @@ public class WorldSettingsScreen extends BOptionScreen {
 
             @Override
             public String from(Holder<Biome> input) {
-                return input.unwrapKey().get().location().toString();
+                return input.unwrapKey().get().identifier().toString();
             }
         }
     }

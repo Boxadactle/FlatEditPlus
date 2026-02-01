@@ -49,7 +49,7 @@ public enum FlatStructures {
 
     public static FlatStructures fromStructureSet(Holder<StructureSet> structureSet) {
         for (FlatStructures structure : values()) {
-            if (structureSet.is(structure.getStructure().location())) {
+            if (structureSet.is(structure.getStructure().identifier())) {
                 return structure;
             }
         }

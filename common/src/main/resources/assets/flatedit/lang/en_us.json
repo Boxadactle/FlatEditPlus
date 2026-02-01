@@ -22,6 +22,7 @@
   "screen.flatedit.presets.loaderror": "There was an error loading some presets",
   "screen.flatedit.presets.loaderror.message": "Check the console for error logs",
   "screen.flatedit.presets.none": "You have no custom presets!",
+  "screen.flatedit.presets.vanilla": "Input Vanilla Preset String Here",
 
   "screen.flatedit.edit": "Editing Layer",
   "screen.flatedit.edit.block": "Block: %s",
@@ -60,6 +61,7 @@
 
   "button.flatedit.presets": "Presets...",
   "button.flatedit.preview": "Preview",
+  "button.flatedit.mcpreset": "Import Vanilla Preset",
 
   "message.flatedit.toomanylayers": "Adding more layers will exceed the height limit!",
   "message.flatedit.toomanylayers.amount": "You can only add %s more layers.",
