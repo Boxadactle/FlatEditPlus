@@ -1,19 +1,15 @@
 plugins {
     id 'multiloader-loader'
-    id 'fabric-loom'
+    id 'net.fabricmc.fabric-loom'
 }
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
-    mappings loom.layered {
-        officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-${parchment_minecraft}:${parchment_version}@zip")
-    }
-    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+    implementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
 
-    modImplementation ("dev.boxadactle:Boxlib-fabric:${boxlib_version}") { transitive = false }
+    implementation ("dev.boxadactle:Boxlib-fabric:${boxlib_version}") { transitive = false }
 
-    modImplementation("com.terraformersmc:modmenu:${rootProject.modmenu_version}") {
+    implementation("com.terraformersmc:modmenu:${rootProject.modmenu_version}") {
         transitive = false
     }
 }
@@ -22,9 +18,6 @@ loom {
     def aw = project(':common').file("src/main/resources/${mod_id}.accesswidener")
     if (aw.exists()) {
         accessWidenerPath.set(aw)
-    }
-    mixin {
-        defaultRefmapName.set("${mod_id}.refmap.json")
     }
     runs {
         client {
@@ -57,13 +50,6 @@ sourceSets.configureEach {
             attributes {
                 attribute(loaderAttribute, 'fabric')
             }
-        }
-    }
-}
-loom.remapConfigurations.configureEach {
-    configurations.named(it.name) {
-        attributes {
-            attribute(loaderAttribute, 'fabric')
         }
     }
 }

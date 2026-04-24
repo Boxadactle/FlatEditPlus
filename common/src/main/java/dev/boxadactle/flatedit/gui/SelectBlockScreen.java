@@ -10,7 +10,7 @@ import dev.boxadactle.boxlib.util.ClientUtils;
 import dev.boxadactle.boxlib.util.GuiUtils;
 import dev.boxadactle.boxlib.util.RenderUtils;
 import dev.boxadactle.flatedit.FlatEdit;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Tooltip;
@@ -123,12 +123,12 @@ public class SelectBlockScreen extends BOptionScreen {
         }
 
         @Override
-        protected void renderContents(GuiGraphics p_458247_, int p_457832_, int p_457537_, float p_457835_) {
+        protected void extractContents(GuiGraphicsExtractor p_458247_, int p_457832_, int p_457537_, float p_457835_) {
             if (isHovered()) {
                 RenderUtils.drawSquare(p_458247_, getX(), getY(), getWidth(), getHeight(), 0x405c5c5c);
             }
 
-            p_458247_.renderFakeItem(FlatEdit.getDisplayItem(block), getX() + 3, getY() + 3);
+            p_458247_.fakeItem(FlatEdit.getDisplayItem(block), getX() + 3, getY() + 3);
         }
 
         @Override
@@ -156,7 +156,7 @@ public class SelectBlockScreen extends BOptionScreen {
         }
 
         @Override
-        public void renderContent(GuiGraphics guiGraphics, int mouseX, int mouseY, boolean b, float tickDelta) {
+        public void extractContent(GuiGraphicsExtractor GuiGraphicsExtractor, int mouseX, int mouseY, boolean b, float tickDelta) {
             // render all buttons next to each other in the center of the row maintaining their width; button height always = entryHeight
             int buttonWidth = 20;
             int buttonSpacing = 2;
@@ -168,7 +168,7 @@ public class SelectBlockScreen extends BOptionScreen {
                 button.setY(getContentY());
                 button.setWidth(buttonWidth);
                 button.setHeight(getContentHeight());
-                button.render(guiGraphics, mouseX, mouseY, tickDelta);
+                button.extractRenderState(GuiGraphicsExtractor, mouseX, mouseY, tickDelta);
             }
         }
     }

@@ -12,7 +12,7 @@ import dev.boxadactle.flatedit.gui.*;
 import dev.boxadactle.flatedit.json.FlatLayer;
 import dev.boxadactle.flatedit.json.FlatPreset;
 import dev.boxadactle.flatedit.json.PresetParser;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
@@ -227,7 +227,7 @@ public class FlatEditScreen extends BOptionScreen {
         }
 
         @Override
-        public void renderContent(GuiGraphics stack, int mouseX, int mouseY, boolean b, float tickDelta) {
+        public void extractContent(GuiGraphicsExtractor stack, int mouseX, int mouseY, boolean b, float tickDelta) {
             ItemStack item = FlatEdit.getDisplayItem(layer.getBlockState());
 
             int x= getX();
@@ -237,12 +237,12 @@ public class FlatEditScreen extends BOptionScreen {
 
             stack.blitSprite(RenderPipelines.GUI_TEXTURED, FlatEdit.SLOT_SPRITE, x+1, y+1, 18, 18);
             if (!item.isEmpty()) {
-                stack.renderFakeItem(item, x+2, y+2);
+                stack.fakeItem(item, x+2, y+2);
             }
 
             name.setX(x+ 30);
             name.setY(y + 2);
-            name.render(stack, mouseX, mouseY, tickDelta);
+            name.extractRenderState(stack, mouseX, mouseY, tickDelta);
 
             int e = entryWidth - 50;
 
@@ -250,31 +250,31 @@ public class FlatEditScreen extends BOptionScreen {
             remove.setY(y + getPadding());
             remove.setWidth(getButtonWidth(ButtonType.TINY));
             remove.setHeight(getButtonHeight());
-            remove.render(stack, mouseX, mouseY, tickDelta);
+            remove.extractRenderState(stack, mouseX, mouseY, tickDelta);
 
             edit.setX(e - getPadding() - getButtonWidth(ButtonType.TINY) - getPadding());
             edit.setY(y + getPadding());
             edit.setWidth(getButtonWidth(ButtonType.TINY));
             edit.setHeight(getButtonHeight());
-            edit.render(stack, mouseX, mouseY, tickDelta);
+            edit.extractRenderState(stack, mouseX, mouseY, tickDelta);
 
             up.setX(e - getPadding() - getButtonWidth(ButtonType.TINY) - getPadding() - 22);
             up.setY(y + getPadding());
             up.setWidth(getButtonHeight());
             up.setHeight(getButtonHeight());
-            up.render(stack, mouseX, mouseY, tickDelta);
+            up.extractRenderState(stack, mouseX, mouseY, tickDelta);
 
             down.setX(e - getPadding() - getButtonWidth(ButtonType.TINY) - getPadding() - 44);
             down.setY(y + getPadding());
             down.setWidth(getButtonHeight());
             down.setHeight(getButtonHeight());
-            down.render(stack, mouseX, mouseY, tickDelta);
+            down.extractRenderState(stack, mouseX, mouseY, tickDelta);
 
             layers.setX(e - getPadding() - getButtonWidth(ButtonType.TINY) - getPadding() - 44 - 50);
             layers.setY(y + getPadding());
             layers.setWidth(45);
             layers.setHeight(getButtonHeight());
-            layers.render(stack, mouseX, mouseY, tickDelta);
+            layers.extractRenderState(stack, mouseX, mouseY, tickDelta);
         }
     }
 }

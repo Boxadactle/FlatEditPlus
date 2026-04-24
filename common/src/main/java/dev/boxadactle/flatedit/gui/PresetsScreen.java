@@ -13,7 +13,7 @@ import dev.boxadactle.flatedit.FlatEdit;
 import dev.boxadactle.flatedit.FlatEditScreen;
 import dev.boxadactle.flatedit.json.FlatPreset;
 import dev.boxadactle.flatedit.json.PresetParser;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
@@ -256,7 +256,7 @@ public class PresetsScreen extends BOptionScreen {
         }
 
         @Override
-        public void renderContent(GuiGraphics stack, int mouseX, int mouseY, boolean b, float tickDelta) {
+        public void extractContent(GuiGraphicsExtractor stack, int mouseX, int mouseY, boolean b, float tickDelta) {
             ItemStack item = FlatEdit.getDisplayItem(preset.layers.getLast().getBlockState());
 
             int x = getContentX();
@@ -266,24 +266,24 @@ public class PresetsScreen extends BOptionScreen {
 
             stack.blitSprite(RenderPipelines.GUI_TEXTURED, FlatEdit.SLOT_SPRITE, x+1, y+1, 18, 18);
             if (!item.isEmpty()) {
-                stack.renderFakeItem(item, x+2, y+2);
+                stack.fakeItem(item, x+2, y+2);
             }
 
             nameLabel.setX(x + 24);
             nameLabel.setY(y + 2);
             nameLabel.setWidth(100);
             nameLabel.setHeight(entryHeight - 4);
-            nameLabel.render(stack, mouseX, mouseY, tickDelta);
+            nameLabel.extractRenderState(stack, mouseX, mouseY, tickDelta);
 
             useButton.setX(entryWidth - getButtonWidth(ButtonType.TINY) - getPadding());
             useButton.setY(y + 2);
             useButton.setWidth(getButtonWidth(ButtonType.TINY));
-            useButton.render(stack, mouseX, mouseY, tickDelta);
+            useButton.extractRenderState(stack, mouseX, mouseY, tickDelta);
 
             deleteButton.setX(entryWidth - getButtonWidth(ButtonType.TINY) - getPadding() - getButtonWidth(ButtonType.TINY) - getPadding());
             deleteButton.setY(y + 2);
             deleteButton.setWidth(getButtonWidth(ButtonType.TINY));
-            deleteButton.render(stack, mouseX, mouseY, tickDelta);
+            deleteButton.extractRenderState(stack, mouseX, mouseY, tickDelta);
         }
     }
 }

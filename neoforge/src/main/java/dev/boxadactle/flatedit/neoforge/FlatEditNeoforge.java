@@ -1,4 +1,4 @@
-package dev.boxadactle.neoforge;
+package dev.boxadactle.flatedit.neoforge;
 
 import dev.boxadactle.flatedit.FlatEdit;
 import net.neoforged.api.distmarker.Dist;
